@@ -1,35 +1,32 @@
-import React, { useState } from 'react';
-import { View, Image } from 'react-native';
-import { TextInput, HelperText, Button } from 'react-native-paper';
+import React, { useState } from 'react'
+import { View, Image, StyleSheet } from 'react-native'
+import { TextInput, HelperText, Button } from 'react-native-paper'
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState('2124802010050@student.tdmu.edu.vn');
-  const [password, setPassword] = useState('12345qqq@');
-  const [showPassword, setShowPassword] = useState(false); 
+  const [email, setEmail] = useState('2124802010050@student.tdmu.edu.vn')
+  const [password, setPassword] = useState('12345qqq@')
+  const [showPassword, setShowPassword] = useState(false)
 
-  const checkEmail = () => !email.includes('@');
-
+  const checkEmail = () => !email.includes('@')
   const checkPassword = () => {
-    const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-    return !regex.test(password);
-  };
+    const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/
+    return !regex.test(password)
+  }
 
-  const myStyle = {
-    container: { padding: 20 },
-    image: {
-      width: 150,
-      height: 150,
-      alignSelf: 'center',
-      marginBottom: 20,
-    },
-    button: { marginTop: 10 },
-  };
+  const handleLogin = () => {
+    if (checkEmail() || checkPassword()) {
+      alert('Vui lòng kiểm tra lại thông tin!')
+    } else {
+      alert('Đăng nhập thành công')
+      navigation.replace('DrawerNavigator') // Điều hướng đến menu chính
+    }
+  }
 
   return (
-    <View style={myStyle.container}>
+    <View style={styles.container}>
       <Image
         source={require('../assets/firebase_icon.png')}
-        style={myStyle.image}
+        style={styles.image}
         resizeMode="contain"
       />
 
@@ -46,7 +43,7 @@ const Login = ({ navigation }) => {
       <TextInput
         value={password}
         onChangeText={setPassword}
-        secureTextEntry={!showPassword} 
+        secureTextEntry={!showPassword}
         placeholder="Input password"
         left={<TextInput.Icon icon="key" />}
         right={
@@ -57,16 +54,10 @@ const Login = ({ navigation }) => {
         }
       />
       <HelperText type="error" visible={checkPassword()}>
-        Password 6-16 ký gồm chữ hoa thường và ký tự đặc biệt
+        Mật khẩu 6-16 ký tự, gồm chữ và ký tự đặc biệt
       </HelperText>
 
-      <Button
-        style={myStyle.button}
-        mode="contained"
-        onPress={() => {
-          alert('Đăng nhập thành công');
-        }}
-      >
+      <Button mode="contained" onPress={handleLogin} style={styles.button}>
         Đăng nhập
       </Button>
 
@@ -77,7 +68,22 @@ const Login = ({ navigation }) => {
         Quên mật khẩu?
       </Button>
     </View>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20
+  },
+  image: {
+    width: 150,
+    height: 150,
+    alignSelf: 'center',
+    marginBottom: 20
+  },
+  button: {
+    marginTop: 10
+  }
+})

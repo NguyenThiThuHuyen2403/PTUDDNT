@@ -1,12 +1,65 @@
+//----Code Lab2----------------------------------------------------------------
+import React from 'react';
+import { Provider } from 'react-redux';
+import DrawerNavigator from './Lab2/navigation/DrawerNavigator';  // Giả sử DrawerNavigator được định nghĩa trong `routes.js`
+import store from './Lab2/redux/store';  // Giả sử bạn đã cấu hình Redux store trong file `store.js`
+
+const App = () => {
+  return (
+    <Provider store={store}>
+      <DrawerNavigator />
+    </Provider>
+  );
+};
+
+export default App;
+
+
+
+// //----Code Excersise 4----------------------------------------------------------------
+// import React from 'react'
+// import { NavigationContainer } from '@react-navigation/native'
+// import { createNativeStackNavigator } from '@react-navigation/native-stack'
+// import { Provider as PaperProvider } from 'react-native-paper'
+// import Login from './Excersise 3/Login'
+// import CreateNewAccount from './Excersise 3/CreateNewAccount'
+// import ResetPassword from './Excersise 3/ResetPassword'
+// import DrawerNavigator from './Excersise 4/DrawerNavigator'
+
+// const Stack = createNativeStackNavigator()
+
+// export default function App() {
+//   return (
+//     <PaperProvider>
+//       <NavigationContainer>
+//         <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+//           <Stack.Screen name="Login" component={Login} />
+//           <Stack.Screen name="CreateNewAccount" component={CreateNewAccount} />
+//           <Stack.Screen name="ResetPassword" component={ResetPassword} />
+//           <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
+//         </Stack.Navigator>
+//       </NavigationContainer>
+//     </PaperProvider>
+//   )
+// }
+
+
+
+//----Code Lap1.2----------------------------------------------------------------
+// import React from 'react';
+// import Calculator from './Lab1.2/Calculator';
+
+// export default function App() {
+//   return <Calculator />;
+// }
 
 //-----Code Lab1----------------------------------------------------------------
-// // App.js
 // import React from 'react';
 // import { Button, ScrollView, View, StyleSheet } from 'react-native';
 // import { NavigationContainer } from '@react-navigation/native';
 // import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-// // Import các project
+
 // import Project1 from './Lab1/Project1';
 // import Project2 from './Lab1/Project2';
 // import Project3 from './Lab1/Project3';
@@ -197,3 +250,4 @@
 //     fontSize: 16,
 //   },
 // });
+
