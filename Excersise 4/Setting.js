@@ -1,21 +1,12 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
-import { Text } from 'react-native-paper'
+import { View, Text } from 'react-native'
 
 const Setting = () => {
   return (
-    <View style={styles.container}>
-      <Text variant="displayMedium">Setting Screen</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Cài đặt</Text>
     </View>
   )
 }
 
 export default Setting
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})

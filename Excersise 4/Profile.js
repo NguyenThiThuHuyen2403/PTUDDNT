@@ -1,21 +1,13 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
-import { Text } from 'react-native-paper'
+import { View, Text } from 'react-native'
 
 const Profile = () => {
   return (
-    <View style={styles.container}>
-      <Text variant="displayMedium">Profile Screen</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Thông tin cá nhân</Text>
     </View>
   )
 }
 
 export default Profile
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
+ 
