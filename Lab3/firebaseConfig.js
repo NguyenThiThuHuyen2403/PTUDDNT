@@ -1,6 +1,6 @@
+// lab3/firebaseConfig.js
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDZyZeefxRKzXxfYg5pJqZyE7lQxOjVgpw",
@@ -9,16 +9,9 @@ const firebaseConfig = {
   storageBucket: "todosapp-6119b.appspot.com",  
   messagingSenderId: "245558360058",
   appId: "1:245558360058:web:5e49ac580943b4734e5643",
-  measurementId: "G-4ZDV5N07H3"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Initialize Firestore
 const db = getFirestore(app);
-
-// Optional: Initialize Analytics (chỉ dùng cho web)
-const analytics = getAnalytics(app);
 
 export { db };

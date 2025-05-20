@@ -1,10 +1,25 @@
-//----Code Excersise 5----------------------------------------------------------------
+// App.js
 import React from 'react';
-import TodoList from './Excersise 5/TodoList';
+import Router from './Lab3/routers/Router';
+import { UserProvider } from './Lab3/screens/UserContext';
 
-export default function App() {
-  return <TodoList />;
+export default function App()
+{
+  return (
+    <UserProvider>
+      <Router />
+    </UserProvider>
+  );
 }
+
+
+//----Code Excersise 5----------------------------------------------------------------
+// import React from 'react';
+// import TodoList from './Excersise 5/TodoList';
+
+// export default function App() {
+//   return <TodoList />;
+// }
 
 //----Code Lab2----------------------------------------------------------------
 // import React from 'react';
@@ -176,7 +191,7 @@ export default function App() {
 
 //   return (
 //     <ImageBackground
-//       source={require('./assets/lacay.jpg')} 
+//       source={require('./assets/lacay.jpg')}
 //       style={styles.background}
 //       resizeMode="cover"
 //     >
@@ -187,7 +202,7 @@ export default function App() {
 
 //       <View style={styles.centerBox}>
 //         <Image
-//           source={require('./assets/pokemon.jpg')} 
+//           source={require('./assets/pokemon.jpg')}
 //           style={styles.logo}
 //           resizeMode="contain"
 //         />
@@ -228,7 +243,7 @@ export default function App() {
 //   },
 //   centerBox: {
 //     flex: 1,
-//     justifyContent: 'center', 
+//     justifyContent: 'center',
 //     alignItems: 'center',
 //     paddingHorizontal: 20,
 //   },
