@@ -1,8 +1,8 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/Home'; // màn danh sách dịch vụ (đã đổi sang Home.js mới)
-import Transaction from '../screens/Transaction';
-import Customer from '../screens/Customer';
+import Appointments from '../screens/Appointments';
+import Profile from '../screens/Profile';
 import Setting from '../screens/Setting';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -25,10 +25,10 @@ export default function CustomerTabNavigator()
             case 'Home':
               iconName = 'home';
               break;
-            case 'Transaction':
-              iconName = 'receipt-long';
+            case 'Appointment':
+              iconName = 'event';
               break;
-            case 'Customer':
+            case 'Profile':
               iconName = 'person';
               break;
             case 'Setting':
@@ -42,8 +42,8 @@ export default function CustomerTabNavigator()
       })}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Transaction" component={Transaction} />
-      <Tab.Screen name="Customer" component={Customer} />
+      <Tab.Screen name="Appointment" component={Appointments} />
+      <Tab.Screen name="Profile" component={Profile} />
       <Tab.Screen name="Setting" component={Setting} />
     </Tab.Navigator>
   );

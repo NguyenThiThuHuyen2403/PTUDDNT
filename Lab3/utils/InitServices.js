@@ -1,6 +1,7 @@
 // lab3/utils/InitServices.js
-import { collection, getDocs, addDoc, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, addDoc, Timestamp, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
+import { query, where } from 'firebase/firestore';
 
 const dichVuMau = [
   {
@@ -47,12 +48,41 @@ const dichVuMau = [
   },
 ];
 
-export const taoDuLieuMau = async () => {
+export const taoDuLieuMau = async () =>
+{
   const querySnapshot = await getDocs(collection(db, 'services'));
 
-  if (querySnapshot.empty) {
-    for (let dv of dichVuMau) {
+  if (querySnapshot.empty)
+  {
+    for (let dv of dichVuMau)
+    {
       await addDoc(collection(db, 'services'), dv);
     }
+  }
+};
+
+export const setAdminAccount = async () =>
+{
+  try
+  {
+    // Tìm user với số điện thoại 0337612621
+    const q = query(collection(db, 'users'), where('phone', '==', '0337612621'));
+    const snapshot = await getDocs(q);
+
+    if (!snapshot.empty)
+    {
+      const userDoc = snapshot.docs[0];
+      // Cập nhật role thành admin
+      await updateDoc(doc(db, 'users', userDoc.id), {
+        role: 'admin'
+      });
+      console.log('Đã cập nhật tài khoản thành admin thành công');
+    } else
+    {
+      console.log('Không tìm thấy tài khoản');
+    }
+  } catch (error)
+  {
+    console.error('Lỗi khi cập nhật tài khoản:', error);
   }
 };

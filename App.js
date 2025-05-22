@@ -2,13 +2,19 @@
 import React from 'react';
 import Router from './Lab3/routers/Router';
 import { UserProvider } from './Lab3/screens/UserContext';
+import { MenuProvider } from 'react-native-popup-menu';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App()
 {
   return (
-    <UserProvider>
-      <Router />
-    </UserProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <MenuProvider>
+        <UserProvider>
+          <Router />
+        </UserProvider>
+      </MenuProvider>
+    </GestureHandlerRootView>
   );
 }
 

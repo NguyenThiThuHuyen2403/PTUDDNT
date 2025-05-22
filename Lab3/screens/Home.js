@@ -11,6 +11,7 @@ import
     SafeAreaView,
     StatusBar,
     TextInput,
+    ScrollView,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { collection, getDocs } from 'firebase/firestore';
@@ -80,14 +81,58 @@ const Home = ({ navigation }) =>
             {/* Header */}
             <View style={styles.headerBar}>
                 <Text style={styles.headerTitle}>{user?.name || 'Chào mừng!'}</Text>
-                <TouchableOpacity style={styles.headerIcon}>
-                    <MaterialIcons name="menu" size={28} color="#fff" />
-                </TouchableOpacity>
+                <View style={styles.headerIcons}>
+
+                    <TouchableOpacity style={styles.headerIcon}>
+                        <MaterialIcons name="menu" size={28} color="#fff" />
+                    </TouchableOpacity>
+                </View>
             </View>
+
+            {/* Menu */}
+            {/* <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.menuContainer}>
+                <TouchableOpacity
+                    style={styles.menuItem}
+                    onPress={() => navigation.navigate('Services')}
+                >
+                    <MaterialIcons name="spa" size={24} color="#e91e63" />
+                    <Text style={styles.menuText}>Dịch vụ</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.menuItem}
+                    onPress={() => navigation.navigate('Appointments')}
+                >
+                    <MaterialIcons name="event" size={24} color="#e91e63" />
+                    <Text style={styles.menuText}>Lịch hẹn</Text>
+                </TouchableOpacity>
+
+                {user?.role === 'admin' && (
+                    <>
+                        <TouchableOpacity
+                            style={styles.menuItem}
+                            onPress={() => navigation.navigate('Customers')}
+                        >
+                            <MaterialIcons name="people" size={24} color="#e91e63" />
+                            <Text style={styles.menuText}>Khách hàng</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.menuItem}
+                            onPress={() => navigation.navigate('AddNewService')}
+                        >
+                            <MaterialIcons name="add-circle" size={24} color="#e91e63" />
+                            <Text style={styles.menuText}>Thêm dịch vụ</Text>
+                        </TouchableOpacity>
+                    </>
+                )}
+            </ScrollView> */}
+
             {/* Logo */}
             <View style={styles.logoContainer}>
                 <Image source={require('./logolab3.png')} style={styles.logo} resizeMode="contain" />
             </View>
+
             {/* Ô tìm kiếm */}
             <View style={styles.searchBox}>
                 <MaterialIcons name="search" size={22} color="#e91e63" style={{ marginRight: 6 }} />
@@ -99,15 +144,19 @@ const Home = ({ navigation }) =>
                     placeholderTextColor="#aaa"
                 />
             </View>
+
             {/* Tiêu đề + nút cộng */}
             <View style={styles.titleRow}>
                 <Text style={styles.listTitle}>Danh sách dịch vụ</Text>
                 {user?.role === 'admin' && (
                     <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('AddNewService')}>
-                        <MaterialIcons name="add-circle" size={28} color="#e91e63" />
+                        <View style={styles.addBtnCircle}>
+                            <MaterialIcons name="add" size={24} color="#fff" />
+                        </View>
                     </TouchableOpacity>
                 )}
             </View>
+
             {/* Danh sách dịch vụ */}
             <View style={styles.listContainer}>
                 {dangTai ? (
@@ -148,8 +197,28 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         letterSpacing: 1,
     },
+    headerIcons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     headerIcon: {
         padding: 4,
+        marginLeft: 8,
+    },
+    menuContainer: {
+        backgroundColor: '#fff',
+        paddingVertical: 12,
+        paddingHorizontal: 8,
+    },
+    menuItem: {
+        alignItems: 'center',
+        marginHorizontal: 12,
+        padding: 8,
+    },
+    menuText: {
+        marginTop: 4,
+        color: '#666',
+        fontSize: 12,
     },
     logoContainer: {
         alignItems: 'center',
@@ -183,6 +252,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginHorizontal: 16,
         marginBottom: 8,
+        marginTop: 8,
     },
     listTitle: {
         fontSize: 16,
@@ -190,7 +260,20 @@ const styles = StyleSheet.create({
         color: '#222',
     },
     addBtn: {
-        marginLeft: 8,
+        padding: 4,
+    },
+    addBtnCircle: {
+        backgroundColor: '#e91e63',
+        borderRadius: 20,
+        width: 40,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 3,
+        shadowColor: '#e91e63',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
     },
     listContainer: {
         flex: 1,

@@ -27,8 +27,7 @@ export default function Register({ navigation })
       Alert.alert('Lỗi', 'Mật khẩu xác nhận không khớp');
       return;
     }
-    // Phân quyền: nếu email là admin@admin.com thì role là admin, ngược lại là user
-    const role = email.trim().toLowerCase() === 'admin@admin.com' ? 'admin' : 'user';
+
     try
     {
       const docRef = await addDoc(collection(db, 'users'), {
@@ -37,9 +36,10 @@ export default function Register({ navigation })
         phone,
         address,
         password,
-        role,
+        role: 'customer',
         createdAt: new Date(),
       });
+
       setUser({
         name,
         email,
@@ -47,8 +47,9 @@ export default function Register({ navigation })
         address,
         password,
         id: docRef.id,
-        role,
+        role: 'customer',
       });
+
       Alert.alert('Thành công', 'Tài khoản đã được đăng ký');
       navigation.reset({
         index: 0,

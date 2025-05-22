@@ -1,104 +1,228 @@
 // lab3/screens/Login.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import
+{
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    Alert,
+    SafeAreaView,
+    StatusBar,
+    Image,
+} from 'react-native';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { useUser } from './UserContext';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-export default function Login({ navigation })
+const Login = ({ navigation }) =>
 {
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const { setUser } = useUser();
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
+    const { setUser } = useUser();
 
-  const handleLogin = async () =>
-  {
-    try
+    const handleLogin = async () =>
     {
-      const q = query(collection(db, 'users'), where('phone', '==', phone));
-      const snapshot = await getDocs(q);
+        if (!phone || !password)
+        {
+            Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ thông tin');
+            return;
+        }
 
-      if (snapshot.empty)
-      {
-        Alert.alert('Lỗi', 'Tài khoản không tồn tại');
-        return;
-      }
+        try
+        {
+            const q = query(collection(db, 'users'), where('phone', '==', phone));
+            const querySnapshot = await getDocs(q);
 
-      const userData = snapshot.docs[0].data();
-      if (userData.password !== password)
-      {
-        Alert.alert('Lỗi', 'Sai mật khẩu');
-        return;
-      }
+            if (querySnapshot.empty)
+            {
+                Alert.alert('Lỗi', 'Số điện thoại không tồn tại');
+                return;
+            }
 
-      // Lưu user vào context (bao gồm role)
-      setUser({
-        ...userData,
-        id: snapshot.docs[0].id,
-        role: userData.role || 'user',
-      });
+            const userDoc = querySnapshot.docs[0];
+            const userData = userDoc.data();
 
-      Alert.alert('Đăng nhập thành công');
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Customer' }],
-      });
+            if (userData.password !== password)
+            {
+                Alert.alert('Lỗi', 'Mật khẩu không đúng');
+                return;
+            }
 
-    } catch (err)
-    {
-      Alert.alert('Lỗi đăng nhập', err.message);
-    }
-  };
+            // Lưu user vào context (bao gồm role)
+            const userWithRole = {
+                id: userDoc.id,
+                ...userData,
+                role: userData.role || 'customer', // Mặc định là customer nếu không có role
+            };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+            console.log('User data before set:', userWithRole); // Debug log
+            setUser(userWithRole);
+            console.log('User set in context'); // Debug log
 
-      <TextInput
-        style={styles.input}
-        placeholder="Phone"
-        value={phone}
-        onChangeText={setPhone}
-        keyboardType="phone-pad"
-      />
+            if (userWithRole.role === 'admin')
+            {
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'AdminTab' }],
+                });
+            } else
+            {
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Customer' }],
+                });
+            }
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+            Alert.alert('Thành công', 'Đăng nhập thành công');
+        } catch (error)
+        {
+            console.error('Login error:', error); // Debug log
+            Alert.alert('Lỗi', error.message);
+        }
+    };
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+    return (
+        <SafeAreaView style={styles.safeArea}>
+            <StatusBar barStyle="light-content" backgroundColor="#e91e63" />
+            <View style={styles.container}>
+                {/* Logo */}
+                <View style={styles.logoContainer}>
+                    <Image source={require('./logolab3.png')} style={styles.logo} resizeMode="contain" />
+                </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.linkText}>Chưa có tài khoản? Đăng ký</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
+                {/* Form đăng nhập */}
+                <View style={styles.formContainer}>
+                    <Text style={styles.title}>Đăng nhập</Text>
+
+                    <View style={styles.inputContainer}>
+                        <MaterialIcons name="phone" size={24} color="#e91e63" style={styles.inputIcon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Số điện thoại"
+                            value={phone}
+                            onChangeText={setPhone}
+                            keyboardType="phone-pad"
+                        />
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                        <MaterialIcons name="lock" size={24} color="#e91e63" style={styles.inputIcon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Mật khẩu"
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry
+                        />
+                    </View>
+
+                    <TouchableOpacity
+                        style={styles.forgotPassword}
+                        onPress={() => navigation.navigate('ForgotPassword')}
+                    >
+                        <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+                        <Text style={styles.loginButtonText}>Đăng nhập</Text>
+                    </TouchableOpacity>
+
+                    <View style={styles.registerContainer}>
+                        <Text style={styles.registerText}>Chưa có tài khoản? </Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                            <Text style={styles.registerLink}>Đăng ký ngay</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        </SafeAreaView>
+    );
+};
+
+export default Login;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', paddingHorizontal: 20, backgroundColor: '#fff' },
-  title: { fontSize: 32, textAlign: 'center', marginBottom: 40, color: '#e91e63' },
-  input: {
-    backgroundColor: '#f6f6f6',
-    padding: 12,
-    marginBottom: 15,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ddd',
-  },
-  button: {
-    backgroundColor: '#e91e63',
-    padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  buttonText: { color: '#fff', fontWeight: 'bold' },
-  linkText: { color: '#e91e63', textAlign: 'center' },
+    safeArea: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    container: {
+        flex: 1,
+        padding: 20,
+    },
+    logoContainer: {
+        alignItems: 'center',
+        marginTop: 40,
+        marginBottom: 40,
+    },
+    logo: {
+        width: 200,
+        height: 80,
+    },
+    formContainer: {
+        flex: 1,
+    },
+    title: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: '#e91e63',
+        marginBottom: 30,
+        textAlign: 'center',
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#f6f6f6',
+        borderRadius: 8,
+        marginBottom: 16,
+        paddingHorizontal: 12,
+        borderWidth: 1,
+        borderColor: '#ddd',
+    },
+    inputIcon: {
+        marginRight: 10,
+    },
+    input: {
+        flex: 1,
+        fontSize: 16,
+        color: '#222',
+        paddingVertical: 12,
+    },
+    forgotPassword: {
+        alignSelf: 'flex-end',
+        marginBottom: 20,
+    },
+    forgotPasswordText: {
+        color: '#e91e63',
+        fontSize: 14,
+    },
+    loginButton: {
+        backgroundColor: '#e91e63',
+        padding: 15,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    loginButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    registerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    registerText: {
+        color: '#666',
+        fontSize: 14,
+    },
+    registerLink: {
+        color: '#e91e63',
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
 });
